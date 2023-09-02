@@ -70,5 +70,12 @@ pipeline {
                 bat "echo Deploying the code to the production environment: $PRODUCTION_ENVIRONMENT"
             }
         }
+        stage("Complete")
+         {
+            steps 
+            {
+                bat "echo Completed."
+            }
+        }
     }
 }
