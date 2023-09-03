@@ -19,7 +19,7 @@ pipeline
                 echo "Run JUnit unit tests"
                 echo "-->mvn test"
                 echo "Run Selenium integration test"
-                echo "-->run_selenium_tests.bat"
+                echo "-->run seleniumtests"
             }
             post 
             {
@@ -55,23 +55,23 @@ pipeline
                 echo "Use OWASP ZAP for security scanning"
                 echo"--owasp-zap-scan"
             }
-             post 
-            {
-                failure 
-                {
-                mail to: "reanyphasy@gmail.com",
-                subject: "The stage construction of Security Scan failed.",
-                body: "Security Scan failed, please check the log for details."
-                // attachLog: true
-                }
-                success 
-                {
-                mail to: "reanyphasy@gmail.com",
-                subject: "The stage construction of Security Scan succeeded."
-                body: "Security Scan succeeded"
-                // attachLog: true
-                }
-            }
+            //  post 
+            // {
+            //     failure 
+            //     {
+            //     mail to: "reanyphasy@gmail.com",
+            //     subject: "The stage construction of Security Scan failed.",
+            //     body: "Security Scan failed, please check the log for details."
+            //     // attachLog: true
+            //     }
+            //     success 
+            //     {
+            //     mail to: "reanyphasy@gmail.com",
+            //     subject: "The stage construction of Security Scan succeeded."
+            //     body: "Security Scan succeeded"
+            //     // attachLog: true
+            //     }
+            // }
         }
         
         stage("Deploy to Staging")
