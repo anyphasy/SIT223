@@ -1,81 +1,93 @@
 pipeline {
     agent any
-
-    environment
-     {
-        DIRECTORY_PATH = "D:\\jenkinss"
-        TESTING_ENVIRONMENT = "testing-environment"
-        PRODUCTION_ENVIRONMENT = "Leyan Chen's production-environment"
-    }
-
+    
     stages {
-        stage('Build') 
-        {
-            steps 
-            {
-                bat "echo Fetch the source code from the directory path: $DIRECTORY_PATH"
-                echo "Compile the code and generating necessary artifacts"
-                bat "dir $DIRECTORY_PATH"  // list the contents of the directory 
-            }
-            post{
-                success{
-                    mail to:"reanyphasy@gmail.com",
-                    subject:"Build Status Email",
-                    body:"Build was successful!"
-                }
+        stage('Build') {
+            steps {
+                echo 'Building Java projects with Maven'
+                echo '-->mvn clean package'
             }
         }
-
-        stage('Test')
-         {
+        
+        stage('Unit and Integration Tests') {
             steps 
             {
-                bat "echo Unit tests"
-                bat "echo Integration tests "
+                echo 'Run JUnit unit tests'
+                echo '-->mvn test'
+                echo 'Run Selenium integration test'
+                echo '-->run_selenium_tests.bat'
             }
-        }
-
-        stage('Code Quality Check')
-         {
-            steps
-             {
-                bat "echo Check the quality of the code"
-            }
-        }
-
-        stage('Deploy') 
-        {
-            steps 
+            post 
             {
-                bat "echo Deploy the application to the testing environment: $TESTING_ENVIRONMENT"
-            }
-        }
-
-        stage('Approval') 
-        {
-            steps 
-            {
-                script 
+                failure 
                 {
-                    bat "echo Waiting for manual approval..."
-                    sleep(time: 10, unit: 'SECONDS')
+                mail to: 'reanyphasy@gmail.com',
+                subject: 'The stage construction of Unit and Integration Tests failed.',
+                body: 'Unit and Integration Tests failed, please check the log for details.',
+                attachLog: true
+                }
+                success 
+                {
+                mail to: 'reanyphasy@gmail.com',
+                subject: 'The stage construction of unit and integration tests succeeded.',
+                body: 'Unit and Integration Tests succeeded',
+                attachLog: true
                 }
             }
         }
-
-        stage('Deploy to Production')
-         {
-            steps 
-            {
-                bat "echo Deploying the code to the production environment: $PRODUCTION_ENVIRONMENT"
+        
+        stage('Code Analysis') {
+            steps {
+                echo 'Integrating SonarQube for code analysis'
+                echo '-->sonar-scanner'
             }
         }
-        stage("Complete")
-         {
-            steps 
+        
+        stage('Security Scan') {
+            steps {
+                echo 'Use OWASP ZAP for security scanning'
+                echo'--owasp-zap-scan'
+            }
+             post 
             {
-                bat "echo Completed."
+                failure 
+                {
+                mail to: 'reanyphasy@gmail.com',
+                subject: 'The stage construction of Security Scan failed.',
+                body: 'Security Scan failed, please check the log for details.',
+                attachLog: true
+                }
+                success 
+                {
+                mail to: 'reanyphasy@gmail.com',
+                subject: 'The stage construction of Security Scan succeeded.',
+                body: 'Security Scan succeeded',
+                attachLog: true
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying EC2 instance of Staging using AWS CloudFormation'
+                echo '-->Deploying the application to a staging server......'
+            }
+        }
+        
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests in Staging environment'
+                echo '-->Running.........'
+            }
+        }
+        
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying EC2 instance of Staging using AWS CloudFormation'
+                echo '-->Deploying the application to a production server........'
             }
         }
     }
+    
+    
 }
