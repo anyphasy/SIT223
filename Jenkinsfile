@@ -9,6 +9,7 @@ pipeline
             steps {
                 echo "Building Java projects with Maven"
                 echo "-->mvn clean package"
+             echo "buildbuildbuild..."
             }
         }
         
