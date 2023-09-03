@@ -24,14 +24,14 @@ pipeline {
                 mail to: 'reanyphasy@gmail.com',
                 subject: 'The stage construction of Unit and Integration Tests failed.',
                 body: 'Unit and Integration Tests failed, please check the log for details.',
-                attachmentsPattern: '**/*.log' 
+                // attachmentsPattern: '**/*.log' 
                 }
                 success 
                 {
                 mail to: 'reanyphasy@gmail.com',
                 subject: 'The stage construction of unit and integration tests succeeded.',
                 body: 'Unit and Integration Tests succeeded',
-                attachmentsPattern: '**/*.log' 
+                // attachmentsPattern: '**/*.log' 
                 }
             }
         }
@@ -55,14 +55,14 @@ pipeline {
                 mail to: 'reanyphasy@gmail.com',
                 subject: 'The stage construction of Security Scan failed.',
                 body: 'Security Scan failed, please check the log for details.',
-                attachmentsPattern: '**/*.log' 
+                // attachmentsPattern: '**/*.log' 
                 }
                 success 
                 {
                 mail to: 'reanyphasy@gmail.com',
                 subject: 'The stage construction of Security Scan succeeded.',
                 body: 'Security Scan succeeded',
-                attachmentsPattern: '**/*.log' 
+                // attachmentsPattern: '**/*.log' 
                 }
             }
         }
