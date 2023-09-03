@@ -20,23 +20,27 @@ pipeline
                 echo "-->mvn test"
                 echo "Run Selenium integration test"
                 echo "-->run seleniumtests"
+                
             }
             post 
             {
-                failure 
-                {
-                mail to: "reanyphasy@gmail.com",
-                subject: "The stage construction of Unit and Integration Tests failed",
-                body: "Unit and Integration Tests failed, please check the log for details."
-                // attachLog: true
-                }
                 success 
                 {
-                mail to:"reanyphasy@gmail.com",
-                subject:"The stage construction of unit and integration tests succeeded",
-                body:"Unit and Integration Tests succeeded!"
-                // attachLog: true
+                 emailext to:"reanyphasy@gmail.com",
+                 attachLog:true,
+                 subject:"The stage construction of unit and integration tests succeeded",
+                 body:"Unit and Integration Tests succeeded!"
+                
                 }
+                failure 
+                {
+                    emailext to: "reanyphasy@gmail.com",
+                    attachLog:true,
+                    subject: "The stage construction of Unit and Integration Tests failed",
+                     body: "Unit and Integration Tests failed, please check the log for details."
+                
+                }
+                
             }
         }
         
@@ -55,23 +59,26 @@ pipeline
                 echo "Use OWASP ZAP for security scanning"
                 echo"--owasp-zap-scan"
             }
-            //  post 
-            // {
-            //     failure 
-            //     {
-            //     mail to: "reanyphasy@gmail.com",
-            //     subject: "The stage construction of Security Scan failed.",
-            //     body: "Security Scan failed, please check the log for details."
-            //     // attachLog: true
-            //     }
-            //     success 
-            //     {
-            //     mail to: "reanyphasy@gmail.com",
-            //     subject: "The stage construction of Security Scan succeeded."
-            //     body: "Security Scan succeeded"
-            //     // attachLog: true
-            //     }
-            // }
+             post 
+            {
+                success 
+                {
+                    emailext to: 'reanyphasy@gmail.com',
+                    subject: "The stage construction of Security Scan succeeded",
+                       attachLog:true,
+                        body: "Security Scan succeeded !"
+                      
+                }
+                failure 
+                {
+                emailext to: "reanyphasy@gmail.com",
+                attachLog:true,
+                subject: "The stage construction of Security Scan failed",
+                body: "Security Scan failed, please check the log for details."
+                
+                }
+                
+            }
         }
         
         stage("Deploy to Staging")
